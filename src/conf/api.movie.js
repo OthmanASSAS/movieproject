@@ -9,7 +9,9 @@ apiMovie.interceptors.request.use( req => {
   return req;
 })
 
-export default apiMovie;
+export const apiMovie;
+
+
 
 
 export const apiMovieMap = (m) => ({
@@ -18,3 +20,18 @@ export const apiMovieMap = (m) => ({
   details: `${ m.release_date } | ${ m.vote_average }/10 (${ m.vote_count })`,
   description: m.overview
 })
+
+export default {
+  searchMovies: (filter) => {
+    const query =
+    '?' +
+    Object.keys(filter)
+      .map((key) => `${key}=${filter[key]}&`)
+      .join('');
+      return apiMovie
+      .get('/search/movie' + query)
+      .then((response) => response.data.results)
+      .then((moviesApi) =>  moviesApi.map(apiMovieMap)
+      )
+  }
+}
